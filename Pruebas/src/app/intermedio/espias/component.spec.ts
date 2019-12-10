@@ -51,14 +51,18 @@ describe("Medicos compent Test Suit", () =>{
     })
     //5 debe llamar al servidor para borrar un medico
     it("debe llamar al servidor para borrar un medico", ()=>{
-
-        const id = "123";
-        const spia = spyOn(servicio, "borrarMedico").and.callFake(id=>{
-            return "Estas seguro que desea borrar este médico";
-        });
-        component.borrarMedico(id);
-        expect(spia).toHaveBeenCalled();
+        spyOn(window, 'confirm').and.returnValue(true);
+        const espia = spyOn(servicio, 'borrarMedico').and.returnValue(EMPTY);
+        component.borrarMedico("1");
+        expect(espia).toHaveBeenCalledWith("1");
     })
 
     //6 no debe llamar al servidor para borrar un medico cuanco el confirmar sea negativo
+
+    it("debe llamar al servidor para borrar un medico", ()=>{
+        spyOn(window, 'confirm').and.returnValue(false);
+        const espia = spyOn(servicio, 'borrarMedico').and.returnValue(EMPTY);
+        component.borrarMedico("1")
+        expect(espia).not.toHaveBeenCalled()
+    })
 })
